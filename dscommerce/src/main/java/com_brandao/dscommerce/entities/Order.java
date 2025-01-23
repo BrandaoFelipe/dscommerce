@@ -3,6 +3,7 @@ package com_brandao.dscommerce.entities;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -102,6 +103,20 @@ public class Order {
         return orderItems.stream().map(x -> x.getProduct()).toList();
     }
     
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+
+        return Objects.equals(id, order.id);
+    }
 }
 
 //muitos para muitos com classe de associação
