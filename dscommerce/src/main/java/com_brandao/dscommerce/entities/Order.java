@@ -2,6 +2,7 @@ package com_brandao.dscommerce.entities;
 
 import java.time.Instant;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 
@@ -29,11 +31,20 @@ public class Order {
     @JoinColumn(name = "client_id")
     private User client; // * orders para 1 client 
 
-    public Order(Long id, Instant moment, OrderStatus status, User client) {
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL) //A propriedade mappedBy é usada para indicar que a entidade Payment é o lado proprietário da relação um-para-um, 
+    private Payment payment;                                  //isso especifica qual lado da relação é responsável por gerenciar a chave estrangeira.
+    
+
+    public Order() {
+
+    }
+
+    public Order(Long id, Instant moment, OrderStatus status, User client, Payment payment) {
         this.id = id;
         this.moment = moment;
         this.status = status;
         this.client = client;
+        this.payment = payment;
     }   
 
     public Long getId() {
@@ -68,5 +79,12 @@ public class Order {
         this.client = client;
     }
 
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
     
 }
