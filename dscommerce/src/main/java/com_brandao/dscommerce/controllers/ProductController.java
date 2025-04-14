@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com_brandao.dscommerce.dtos.ProductDTO;
+import com_brandao.dscommerce.dtos.ProductMinDTO;
 import com_brandao.dscommerce.services.ProductService;
 import jakarta.validation.Valid;
 
@@ -36,10 +37,16 @@ public class ProductController {
         return ResponseEntity.ok(service.findById(id));
     }
 
-    @GetMapping
+    /*@GetMapping
     public ResponseEntity<Page<ProductDTO>> findAll(@RequestParam(name = "name", defaultValue = "") String name, Pageable pageable){ 
 
         return ResponseEntity.ok(service.findAll(name, pageable)); //http://localhost:8080/products?size=10&page=0&sort=name,desc
+    }*/
+
+    @GetMapping
+    public ResponseEntity<Page<ProductMinDTO>> findByName(@RequestParam(name = "name", defaultValue = "") String name, Pageable pageable){ 
+
+        return ResponseEntity.ok(service.findByName(name, pageable)); //http://localhost:8080/products?size=10&page=0&sort=name,desc
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -56,12 +63,14 @@ public class ProductController {
         return ResponseEntity.created(uri).body(productDTO);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<ProductDTO> update(@RequestBody @Valid ProductDTO productDTO,  @PathVariable Long id){
         
         return ResponseEntity.ok(service.update(productDTO, id));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> update(@PathVariable Long id){
         

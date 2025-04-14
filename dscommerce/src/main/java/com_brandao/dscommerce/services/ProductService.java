@@ -1,6 +1,8 @@
 package com_brandao.dscommerce.services;
 
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -9,8 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com_brandao.dscommerce.dtos.CategoryDTO;
 import com_brandao.dscommerce.dtos.ProductDTO;
+import com_brandao.dscommerce.dtos.ProductMinDTO;
+import com_brandao.dscommerce.entities.Category;
 import com_brandao.dscommerce.entities.Product;
+import com_brandao.dscommerce.repositories.CategoryRepository;
 import com_brandao.dscommerce.repositories.ProductRepository;
 import com_brandao.dscommerce.services.exceptions.DatabaseException;
 import com_brandao.dscommerce.services.exceptions.ResourceNotFoundException;
@@ -21,6 +27,8 @@ public class ProductService {
 
     @Autowired
     private ProductRepository repository;
+    @Autowired
+    private CategoryRepository catRepository;
 
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id){
@@ -36,6 +44,13 @@ public class ProductService {
 
         Page<Product> result = repository.searchByName(name, pageable);        
         return result.map(x -> new ProductDTO(x));        
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProductMinDTO> findByName(String name, Pageable pageable){
+
+        Page<Product> result = repository.searchByName(name, pageable);        
+        return result.map(x -> new ProductMinDTO(x));        
     }
 
     @Transactional
@@ -88,8 +103,15 @@ public class ProductService {
         prod.setName(dto.getName());
         prod.setDescription(dto.getDescription());
         prod.setPrice(dto.getPrice());
-        prod.setImgUrl(dto.getImgUrl());        
-
+        prod.setImgUrl(dto.getImgUrl());
+        prod.getCategories().clear();
+        
+        for(CategoryDTO catDto: dto.getCategories()){
+            Category cat = catRepository.getReferenceById(catDto.getId());
+            cat.setId(catDto.getId());
+            prod.getCategories().add(cat);
+        }
+        
     }
 
 }
