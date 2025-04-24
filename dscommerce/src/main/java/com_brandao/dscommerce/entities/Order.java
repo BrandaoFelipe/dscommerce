@@ -3,7 +3,6 @@ package com_brandao.dscommerce.entities;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -18,7 +17,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "tb_order")
 public class Order {
@@ -27,21 +25,20 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") //salva em UTC
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") // salva em UTC
     private Instant moment;
 
     private OrderStatus status;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
-    private User client; // * orders para 1 client 
+    private User client; // * orders para 1 client
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL) //A propriedade mappedBy é usada para indicar que a entidade Payment é o lado proprietário da relação um-para-um, 
-    private Payment payment;                                  //isso especifica qual lado da relação é responsável por gerenciar a chave estrangeira.
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL) // A propriedade mappedBy é usada para indicar que a entidade Payment é o lado proprietário da relação um-para-um, isso especifica qual lado da relação é responsável por gerenciar a chave estrangeira.
+    private Payment payment;
 
-    @OneToMany(mappedBy = "id.order")
+    @OneToMany(mappedBy = "id.order") //id.order é a permissão (endereço) para o OrderItem adicionar a coluna do Id do order
     private Set<OrderItem> orderItems = new HashSet<>();
-    
 
     public Order() {
 
@@ -53,7 +50,7 @@ public class Order {
         this.status = status;
         this.client = client;
         this.payment = payment;
-    }   
+    }
 
     public Long getId() {
         return id;
@@ -102,21 +99,33 @@ public class Order {
     public List<Product> getProducts() {
         return orderItems.stream().map(x -> x.getProduct()).toList();
     }
-    
+
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
-
-        Order order = (Order) o;
-
-        return Objects.equals(id, order.id);
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Order other = (Order) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
     }
+
+    
 }
 
-//muitos para muitos com classe de associação
+// muitos para muitos com classe de associação

@@ -38,20 +38,23 @@ public class OrderItemPK {
 
     @Override
     public int hashCode() {
-        int result = order != null ? order.hashCode() : 0;
-        result = 31 * result + (product != null ? product.hashCode() : 0);
-        return result;
+        if (order == null || product == null)
+            return super.hashCode();
+        return Objects.hash(
+                order.getId(), 
+                product.getId());
     }
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         OrderItemPK that = (OrderItemPK) o;
-        if(!Objects.equals(order, that.order)) return false;
-
-        return Objects.equals(product, that.product);
+        return Objects.equals(order != null ? order.getId() : null,
+                that.order != null ? that.order.getId() : null) &&
+                Objects.equals(product != null ? product.getId() : null,
+                        that.product != null ? that.product.getId() : null);
     }
-    
 }

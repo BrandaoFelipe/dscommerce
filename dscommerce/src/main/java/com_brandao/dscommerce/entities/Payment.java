@@ -1,7 +1,7 @@
 package com_brandao.dscommerce.entities;
 
 import java.time.Instant;
-import java.util.Objects;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -60,19 +60,44 @@ public class Payment {
         this.order = order;
     }
 
-     @Override
+    @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((moment == null) ? 0 : moment.hashCode());
+        result = prime * result + ((order == null) ? 0 : order.hashCode());
+        return result;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
-
-        Payment payment = (Payment) o;
-
-        return Objects.equals(id, payment.id);
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Payment other = (Payment) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (moment == null) {
+            if (other.moment != null)
+                return false;
+        } else if (!moment.equals(other.moment))
+            return false;
+        if (order == null) {
+            if (other.order != null)
+                return false;
+        } else if (!order.equals(other.order))
+            return false;
+        return true;
     }
+
+    
+
 }
 

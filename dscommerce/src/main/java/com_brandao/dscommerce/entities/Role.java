@@ -1,5 +1,7 @@
 package com_brandao.dscommerce.entities;
 
+
+
 import org.springframework.security.core.GrantedAuthority;
 
 import jakarta.persistence.Entity;
@@ -77,5 +79,4 @@ public class Role implements GrantedAuthority //Spring Security
 
     
     
-
 }
