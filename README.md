@@ -71,13 +71,6 @@ Apenas usuários autenticados podem acessar endpoints protegidos. Algumas permis
    http://localhost:8080
    ```
 
-## 🧪 Ambiente de testes
-
-Há um arquivo de propriedades específico para testes:
-```
-src/main/resources/application-test.properties
-```
-
 > É possível configurar testes automatizados e utilizar bancos de dados em memória como H2 para facilitar o desenvolvimento.
 
 ## ✨ Funcionalidades (principais endpoints)
