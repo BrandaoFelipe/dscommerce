@@ -30,23 +30,17 @@ public class ProductController {
     @Autowired
     private ProductService service;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
+    
     @GetMapping(value = "/{id}")
     public ResponseEntity<ProductDTO> findById(@PathVariable Long id){
         
         return ResponseEntity.ok(service.findById(id));
-    }
-
-    /*@GetMapping
-    public ResponseEntity<Page<ProductDTO>> findAll(@RequestParam(name = "name", defaultValue = "") String name, Pageable pageable){ 
-
-        return ResponseEntity.ok(service.findAll(name, pageable)); //http://localhost:8080/products?size=10&page=0&sort=name,desc
-    }*/
+    }    
 
     @GetMapping
     public ResponseEntity<Page<ProductMinDTO>> findByName(@RequestParam(name = "name", defaultValue = "") String name, Pageable pageable){ 
 
-        return ResponseEntity.ok(service.findByName(name, pageable)); //http://localhost:8080/products?size=10&page=0&sort=name,desc
+        return ResponseEntity.ok(service.findByName(name, pageable));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -72,7 +66,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id){
         
         service.delete(id);
         return ResponseEntity.noContent().build();
