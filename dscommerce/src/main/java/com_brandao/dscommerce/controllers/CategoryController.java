@@ -18,56 +18,49 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com_brandao.dscommerce.dtos.ProductDTO;
-import com_brandao.dscommerce.dtos.ProductMinDTO;
-import com_brandao.dscommerce.services.ProductService;
+import com_brandao.dscommerce.dtos.CategoryDTO;
+import com_brandao.dscommerce.services.CategoryService;
+
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/products")
-public class ProductController {
+@RequestMapping(value = "/categories")
+public class CategoryController {
 
     @Autowired
-    private ProductService service;
+    private CategoryService service;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ProductDTO> findById(@PathVariable Long id){
+    public ResponseEntity<CategoryDTO> findById(@PathVariable Long id){
         
         return ResponseEntity.ok(service.findById(id));
     }
 
-    /*@GetMapping
-    public ResponseEntity<Page<ProductDTO>> findAll(@RequestParam(name = "name", defaultValue = "") String name, Pageable pageable){ 
-
-        return ResponseEntity.ok(service.findAll(name, pageable)); //http://localhost:8080/products?size=10&page=0&sort=name,desc
-    }*/
-
     @GetMapping
-    public ResponseEntity<Page<ProductMinDTO>> findByName(@RequestParam(name = "name", defaultValue = "") String name, Pageable pageable){ 
+    public ResponseEntity<Page<CategoryDTO>> findByName(@RequestParam(name = "name", defaultValue = "") String name, Pageable pageable){ 
 
-        return ResponseEntity.ok(service.findByName(name, pageable)); //http://localhost:8080/products?size=10&page=0&sort=name,desc
+        return ResponseEntity.ok(service.findByName(name, pageable));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<ProductDTO> insert (@RequestBody @Valid ProductDTO productDTO){ 
+    public ResponseEntity<CategoryDTO> insert (@RequestBody @Valid CategoryDTO dto){ 
 
-        productDTO = service.insert(productDTO);
+        dto = service.insert(dto);
         URI uri = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
-                    .buildAndExpand(productDTO.getId())
+                    .buildAndExpand(dto.getId())
                     .toUri();
 
-        return ResponseEntity.created(uri).body(productDTO);
+        return ResponseEntity.created(uri).body(dto);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ProductDTO> update(@RequestBody @Valid ProductDTO productDTO,  @PathVariable Long id){
+    public ResponseEntity<CategoryDTO> update(@RequestBody @Valid CategoryDTO dto,  @PathVariable Long id){
         
-        return ResponseEntity.ok(service.update(productDTO, id));
+        return ResponseEntity.ok(service.update(dto, id));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
