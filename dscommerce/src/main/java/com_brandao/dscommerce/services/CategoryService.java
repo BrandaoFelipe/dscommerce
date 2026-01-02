@@ -3,6 +3,8 @@ package com_brandao.dscommerce.services;
 
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -36,10 +38,19 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CategoryDTO> findAll(String name, Pageable pageable){
+    public Page<CategoryDTO> findAllPaged(String name, Pageable pageable){
 
         Page<Category> result = repository.searchByName(name, pageable);        
-        return result.map(x -> new CategoryDTO(x));        
+        return result.map(x -> new CategoryDTO(x.getId(), x.getName()));
+    }
+
+     @Transactional(readOnly = true)
+    public List<CategoryDTO> findAll(){
+
+        List<Category> result = repository.findAll();
+        
+        return result.stream().map(x -> new CategoryDTO(x)).toList();
+        
     }
 
     @Transactional(readOnly = true)

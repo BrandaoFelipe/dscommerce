@@ -2,6 +2,7 @@ package com_brandao.dscommerce.services;
 
 import java.util.List;
 
+import com_brandao.dscommerce.utils.CustomUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +25,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     UserRepository repository;
 
+    @Autowired
+    private CustomUserUtil customUserUtil;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         List<UserDetailsProjection> result = repository.searchUserAndRolesByEmail(username);
@@ -41,22 +45,19 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    protected User authenticated(){
+    protected User authenticated() {
+        try {
 
-        try{
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
-        String username = jwtPrincipal.getClaim("username");
-        
-        return repository.findByEmail(username).get();
+            String username = customUserUtil.getUserLogged();
+            return repository.findByEmail(username).get();
 
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new UsernameNotFoundException("Email Not Found!");
-        }        
+        }
     }
 
     @Transactional(readOnly = true)
-    public UserDTO getMe(){
+    public UserDTO getMe() {
         User user = authenticated();
         return new UserDTO(user);
     }
