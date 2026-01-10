@@ -11,8 +11,7 @@ import jakarta.persistence.Table;
 public class OrderItem {
 
     @EmbeddedId
-    private OrderItemPK id = new OrderItemPK(); // chave estrangeira
-
+    private OrderItemPK id = new OrderItemPK();
     private Integer quantity;
     private Double price;
 

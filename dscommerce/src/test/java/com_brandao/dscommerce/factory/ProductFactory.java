@@ -10,4 +10,11 @@ public class ProductFactory {
         product.getCategories().add(category);
         return product;
     }
+
+    public static Product createProduct2() {
+        Category category = CategoryFactory.createCategory2();
+        Product product = new Product(2L, "teste2", "this is a product2", 100.00, "http://imgurl.copm/sdasdasdasdoij54asd5a4s6d84a6sd");
+        product.getCategories().add(category);
+        return product;
+    }
 }

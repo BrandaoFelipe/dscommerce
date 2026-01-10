@@ -51,13 +51,12 @@ public class OrderService {
 
         Order order = new Order();
 
+        order.setId(dto.getId());
         order.setMoment(Instant.now());
         order.setStatus(OrderStatus.WAITING_PAYMENT);
 
         User user = userService.authenticated();
         order.setClient(user);
-
-        User entity = userService.authenticated();
 
         for (OrderItemDTO itemDto : dto.getItems()) {
             Product product = productRepository.getReferenceById(itemDto.getProductId());
