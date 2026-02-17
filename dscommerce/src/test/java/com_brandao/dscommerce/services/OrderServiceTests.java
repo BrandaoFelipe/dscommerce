@@ -2,7 +2,6 @@ package com_brandao.dscommerce.services;
 
 import com_brandao.dscommerce.dtos.OrderDTO;
 import com_brandao.dscommerce.dtos.OrderItemDTO;
-import com_brandao.dscommerce.dtos.ProductDTO;
 import com_brandao.dscommerce.entities.Order;
 import com_brandao.dscommerce.entities.Product;
 import com_brandao.dscommerce.entities.User;
@@ -105,7 +104,10 @@ public class OrderServiceTests {
         String name = result.getItems().stream().map(OrderItemDTO::getName).findFirst().get();
 
         Assertions.assertNotNull(result);
+        System.out.println("Assertions.assertNotNull(result)");
         Assertions.assertEquals(1L, result.getId());
+        System.out.println("Assertions.assertEquals(1L, result.getId())");
         Assertions.assertEquals("teste", name);
+        System.out.println("Assertions.assertEquals(teste, name)");
     }
 }
